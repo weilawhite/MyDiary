@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">我的日記本</string>
+    <string name="create">重建日記本</string>
+    <string name="error">資料庫開啟失敗</string>
+    <string name="success">資料庫開啟成功!</string>
+    <string name="welcome">歡迎光臨，我的主人</string>
+    <string name="delete_success">資料庫刪除成功</string>
+    <string name="write">寫日記</string>
+    <string name="view">檢視日記本</string>
+    <string name="page_text">共有日記篇數:</string>
+    <string name="create_success">資料庫重建成功!</string>
+    <string name="write_success">寫入日記成功!</string>
+</resources>

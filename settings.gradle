@@ -1,0 +1,3 @@
+include ':stetho-1.5.1-fatjar'
+include ':app'
+rootProject.name = "MyDiary"
