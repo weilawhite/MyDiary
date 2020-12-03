@@ -37,6 +37,13 @@ public class Diary {
         this.date = date;
     }
 
+    public Diary(int id, String title, String body, String date) {
+        this.id = id;
+        this.title = title;
+        this.body = body;
+        this.date = date;
+    }
+
     public Diary(String title, String body, String date) {
         this.title = title;
         this.body = body;

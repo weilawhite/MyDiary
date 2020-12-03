@@ -2,9 +2,14 @@ package com.example.mydiary;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySQLite {
     private String TAG = "MySQLite";
@@ -53,17 +58,43 @@ public class MySQLite {
         return false;
     }
 
-     void insert(Diary diary) {
+    void insert(Diary diary) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Diary.KEY_TITLE, diary.getTitle());
-        contentValues.put(Diary.KEY_BODY,diary.getBody());
-        contentValues.put(Diary.KEY_DATE,diary.getDate());
+        contentValues.put(Diary.KEY_BODY, diary.getBody());
+        contentValues.put(Diary.KEY_DATE, diary.getDate());
         database.insert(tableName, null, contentValues);
         Toast.makeText(context, R.string.write_success, Toast.LENGTH_SHORT).show();
     }
 
-    public void delete(int id){
-        database.delete(tableName,"id="+id,null);
+    public void delete(int id) {
+        database.delete(tableName, "id=" + id, null);
+    }
+
+    public List<Diary> selectAll() {
+        List<Diary> item = new ArrayList<>();
+        String sqlStr = "select * from " + tableName;
+        Cursor cursor = database.rawQuery(sqlStr, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(Diary.KEY_ID)));
+                String title = cursor.getString(cursor.getColumnIndex(Diary.KEY_TITLE));
+                String body = cursor.getString(cursor.getColumnIndex(Diary.KEY_BODY));
+                String date = cursor.getString(cursor.getColumnIndex(Diary.KEY_DATE));
+                item.add(new Diary(id, title, body, date));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return item;
+    }
+
+    public int getCount(){
+
+        String sqlStr = "select * from " + tableName;
+        Cursor cursor = database.rawQuery(sqlStr, null);
+        int count=cursor.getCount();
+        cursor.close();
+        return count;
     }
 
 }

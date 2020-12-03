@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
@@ -18,10 +21,12 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button writeBtn, viewBtn, createBtn;
+    TextView pageText;
     private static SQLiteDatabase database;
     private String dbName = "diary_book.db";
     private String tableName = "diary";
     private MySQLite mySQLite;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +34,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         findView();
+
         Stetho.initializeWithDefaults(this);
         mySQLite = new MySQLite(this);
+        handler = new Handler(Looper.myLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                setTitle(Tools.getDateTime());
+                handler.post(this);
+            }
+        });
+
 
         if (mySQLite.openDatabase()) {
             Toast.makeText(this, R.string.success, Toast.LENGTH_LONG).show();
+            pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
             return;
         }
         Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show();
@@ -43,12 +64,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         writeBtn = findViewById(R.id.write_btn);
         viewBtn = findViewById(R.id.view_btn);
         createBtn = findViewById(R.id.create_btn);
+        pageText = findViewById(R.id.page_text);
         writeBtn.setOnClickListener(this);
         viewBtn.setOnClickListener(this);
         createBtn.setOnClickListener(this);
-
     }
-
 
     @Override
     public void onClick(View v) {
@@ -56,12 +76,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.write_btn:
                 mySQLite.insert(new Diary("標題?", "內容?", Tools.getDateTime()));
+                pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
                 break;
             case R.id.view_btn:
-                mySQLite.delete(5);
+                mySQLite.selectAll();
+                //mySQLite.delete(5);
                 break;
             case R.id.create_btn:
                 mySQLite.createDatabase();
+                pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
                 break;
         }
     }
