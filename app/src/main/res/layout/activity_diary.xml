@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="6dp">
+
+        <EditText
+            android:id="@+id/title_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/edit_shape"
+            android:hint="@string/title_name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:padding="6dp"
+            android:textSize="24sp"></EditText>
+
+        <Spinner
+            android:id="@+id/weather_spn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:entries="@array/weather_list"></Spinner>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/body_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button_layout"
+        android:layout_below="@+id/title_layout"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape"
+        android:gravity="left|top"
+        android:hint="@string/body"
+        android:padding="6dp"
+        android:textSize="20sp"></EditText>
+
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
+
+        <Button
+            android:id="@+id/ok_btn"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="6dp"
+            android:text="@string/ok"
+            ></Button>
+
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_marginRight="6dp"
+            android:text="@string/erase"
+
+            ></Button>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

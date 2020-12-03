@@ -4,10 +4,26 @@
     <string name="error">資料庫開啟失敗</string>
     <string name="success">資料庫開啟成功!</string>
     <string name="welcome">歡迎光臨，我的主人</string>
-    <string name="delete_success">資料庫刪除成功</string>
+    <string name="delete_success">資料庫重建成功</string>
     <string name="write">寫日記</string>
     <string name="view">檢視日記本</string>
     <string name="page_text">共有日記篇數:</string>
-    <string name="create_success">資料庫重建成功!</string>
-    <string name="write_success">寫入日記成功!</string>
+    <string name="title_name">標題</string>
+    <string name="ok">確定</string>
+    <string name="body">內容</string>
+    <string name="erase">清除</string>
+    <string name="cancel">取消</string>
+    <string name="write_success">寫入日記成功</string>
+    <string name="date">2020/10/11</string>
+    <string name="empty">無日記</string>
+    <string name="message">訊息</string>
+    <string name="delete_message">確定刪除此筆資料?</string>
+    <string name="delete">刪除</string>
+    <string name="modify">修改</string>
+
+    <string-array name="weather_list">
+        <item>晴天</item>
+        <item>雨天</item>
+        <item>陰天</item>
+    </string-array>
 </resources>

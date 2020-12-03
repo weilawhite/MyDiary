@@ -3,6 +3,7 @@ package com.example.mydiary;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,7 +26,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static SQLiteDatabase database;
     private String dbName = "diary_book.db";
     private String tableName = "diary";
-    private MySQLite mySQLite;
+
+    public static MySQLite getMySQLite() {
+        return mySQLite;
+    }
+
+    private static MySQLite mySQLite;
     Handler handler;
 
     @Override
@@ -36,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findView();
 
         Stetho.initializeWithDefaults(this);
-        mySQLite = new MySQLite(this);
+        mySQLite = new MySQLite(this);/*
         handler = new Handler(Looper.myLooper());
         handler.post(new Runnable() {
             @Override
@@ -51,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-
+*/
         if (mySQLite.openDatabase()) {
             Toast.makeText(this, R.string.success, Toast.LENGTH_LONG).show();
             pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
@@ -71,20 +77,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onRestart() {
+        pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
+        super.onRestart();
+    }
+    @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.write_btn:
-                mySQLite.insert(new Diary("標題?", "內容?", Tools.getDateTime()));
-                pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
+                Intent intent=new Intent(this,DiaryActivity.class);
+                startActivity(intent);
                 break;
             case R.id.view_btn:
                 mySQLite.selectAll();
-                //mySQLite.delete(5);
                 break;
             case R.id.create_btn:
                 mySQLite.createDatabase();
-                pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
                 break;
         }
     }
