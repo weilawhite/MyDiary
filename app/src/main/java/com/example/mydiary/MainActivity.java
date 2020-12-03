@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static SQLiteDatabase database;
     private String dbName = "diary_book.db";
     private String tableName = "diary";
+    private MySQLite mySQLite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +29,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         findView();
-
-
         Stetho.initializeWithDefaults(this);
-        create();
+        mySQLite = new MySQLite(this);
+
+        if (mySQLite.openDatabase()) {
+            Toast.makeText(this, R.string.success, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show();
     }
 
     private void findView() {
@@ -50,56 +55,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
             case R.id.write_btn:
-
-                insert();
-
+                mySQLite.insert(new Diary("標題?", "內容?", Tools.getDateTime()));
                 break;
             case R.id.view_btn:
+                mySQLite.delete(5);
                 break;
             case R.id.create_btn:
-                delete();
-                create();
+                mySQLite.createDatabase();
                 break;
-
-
         }
-
-
     }
-
-    private void create() {
-        database = openOrCreateDatabase(dbName, MODE_PRIVATE, null);
-        String sqlstr = "create table if not exists " + tableName +
-                "(ID INTEGER primary key autoincrement," +
-                "TITLE TEXT not null," +
-                "BODY TEXT not null," +
-                "DATE TEXT not null);";
-        database.execSQL(sqlstr);
-    }
-
-    private void insert() {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("TITLE", "標題");
-        contentValues.put("BODY", "內容");
-        contentValues.put("DATE", getDateTime());
-        database.insert(tableName, null, contentValues);
-        Toast.makeText(this, R.string.write_success, Toast.LENGTH_SHORT).show();
-    }
-
-    private void delete() {
-        deleteDatabase(dbName);
-        Toast.makeText(this, R.string.delete_success, Toast.LENGTH_SHORT).show();
-
-    }
-
-    public String getDateTime() {
-        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-        Date date = new Date();
-        String strDate = sdFormat.format(date);
-//System.out.println(strDate);
-        return strDate;
-    }
-
 
     public void close() {
         if (database != null) database.close();
@@ -107,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             close();
             finish();
         }
