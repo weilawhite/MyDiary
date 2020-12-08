@@ -5,9 +5,10 @@ public class Diary {
     public static final String KEY_TITLE = "TITLE";
     public static final String KEY_BODY = "BODY";
     public static final String KEY_DATE = "DATE";
+    public static final String KEY_WEATHER = "WEATHER";
 
     public int id;
-    private String title, body, date;
+    private String title, body, date, weather;
 
     public int getId() {
         return id;
@@ -37,16 +38,22 @@ public class Diary {
         this.date = date;
     }
 
-    public Diary(int id, String title, String body, String date) {
+    public String getWeather() {
+        return weather;
+    }
+
+    public Diary(int id, String title, String body, String date, String weather) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.date = date;
+        this.weather=weather;
     }
 
-    public Diary(String title, String body, String date) {
+    public Diary(String title, String body, String date, String weather) {
         this.title = title;
         this.body = body;
         this.date = date;
+        this.weather = weather;
     }
 }

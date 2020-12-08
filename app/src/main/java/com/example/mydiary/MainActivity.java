@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.create_btn:
                 mySQLite.createDatabase();
+                pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
                 break;
         }
     }

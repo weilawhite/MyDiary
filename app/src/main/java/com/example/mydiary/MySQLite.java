@@ -47,7 +47,8 @@ public class MySQLite {
                 "(" + Diary.KEY_ID + " INTEGER primary key autoincrement," +
                 Diary.KEY_TITLE + " TEXT not null," +
                 Diary.KEY_BODY + " TEXT not null," +
-                Diary.KEY_DATE + " TEXT not null);";
+                Diary.KEY_DATE + " TEXT not null," +
+                Diary.KEY_WEATHER + " TEXT not null);";
         database = context.openOrCreateDatabase(dbName, context.MODE_PRIVATE, null);
         try {
             database.execSQL(sqlstr);
@@ -63,6 +64,7 @@ public class MySQLite {
         contentValues.put(Diary.KEY_TITLE, diary.getTitle());
         contentValues.put(Diary.KEY_BODY, diary.getBody());
         contentValues.put(Diary.KEY_DATE, diary.getDate());
+        contentValues.put(Diary.KEY_WEATHER, diary.getWeather());
         database.insert(tableName, null, contentValues);
         Toast.makeText(context, R.string.write_success, Toast.LENGTH_SHORT).show();
     }
@@ -81,7 +83,8 @@ public class MySQLite {
                 String title = cursor.getString(cursor.getColumnIndex(Diary.KEY_TITLE));
                 String body = cursor.getString(cursor.getColumnIndex(Diary.KEY_BODY));
                 String date = cursor.getString(cursor.getColumnIndex(Diary.KEY_DATE));
-                item.add(new Diary(id, title, body, date));
+                String weather=cursor.getString(cursor.getColumnIndex(Diary.KEY_WEATHER));
+                item.add(new Diary(id, title, body, date,weather));
             } while (cursor.moveToNext());
         }
         cursor.close();
