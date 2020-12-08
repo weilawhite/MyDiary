@@ -73,6 +73,11 @@ public class MySQLite {
         database.delete(tableName, "id=" + id, null);
     }
 
+    public void delete(Diary diary) {
+        database.delete(tableName, String.format("ID='%d'",diary.getId()), null);
+
+    }
+
     public List<Diary> selectAll() {
         List<Diary> item = new ArrayList<>();
         String sqlStr = "select * from " + tableName;

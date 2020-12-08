@@ -90,7 +90,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.view_btn:
-                mySQLite.selectAll();
+                Intent intent2=new Intent(this,ListActivity.class);
+                startActivity(intent2);
+                //mySQLite.selectAll();
                 break;
             case R.id.create_btn:
                 mySQLite.createDatabase();
