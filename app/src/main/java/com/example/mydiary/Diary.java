@@ -1,6 +1,8 @@
 package com.example.mydiary;
 
-public class Diary {
+import java.io.Serializable;
+
+public class Diary implements Serializable {
     public static final String KEY_ID = "ID";
     public static final String KEY_TITLE = "TITLE";
     public static final String KEY_BODY = "BODY";

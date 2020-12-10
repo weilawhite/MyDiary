@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -44,6 +45,17 @@ public class ListActivity extends AppCompatActivity {
         diaryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                Diary diary = diaryListItem.get(position);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("diary", diary);
+
+                Intent intent = new Intent(ListActivity.this, ViewActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+/*
                 popupMenu = new PopupMenu(ListActivity.this, view,  Gravity.TOP);
                 popupMenu.getMenuInflater().inflate(R.menu.pop_menu, popupMenu.getMenu());
 
@@ -67,7 +79,10 @@ public class ListActivity extends AppCompatActivity {
                 popupMenu.show();
                 Log.i(TAG, diaryListItem.get(position).toString());
                 //Toast.makeText(ListActivity.this, diaryListItem.get(position).toString(), Toast.LENGTH_SHORT).show();
+ */
             }
+
+
         });
 
         diaryList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
