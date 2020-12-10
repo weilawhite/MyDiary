@@ -17,7 +17,6 @@
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="6dp"
             android:hint="@string/title_name"
             android:textSize="24sp"></TextView>

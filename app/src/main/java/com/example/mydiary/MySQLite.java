@@ -3,6 +3,7 @@ package com.example.mydiary;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
@@ -74,7 +75,13 @@ public class MySQLite {
     }
 
     public void delete(Diary diary) {
-        database.delete(tableName, String.format("ID='%d'",diary.getId()), null);
+        try {
+            database.delete(tableName, String.format("ID='%d'",diary.getId()), null);
+            Log.i(TAG,"刪除成功");
+        }catch (SQLException e){
+            Log.i(TAG,"刪除失敗");
+        }
+
 
     }
 

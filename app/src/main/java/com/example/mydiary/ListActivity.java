@@ -7,13 +7,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,8 @@ public class ListActivity extends AppCompatActivity {
     private ListView diaryList;
     private List<Diary> diaryListItem;
     private DiaryAdapter diaryAdapter;
+    private PopupMenu popupMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,15 +37,36 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         diaryList = findViewById(R.id.diary_list);
         diaryListItem = MainActivity.getMySQLite().selectAll();
-        diaryAdapter=new DiaryAdapter(this,diaryListItem);
+        diaryAdapter = new DiaryAdapter(this, diaryListItem);
         diaryList.setAdapter(diaryAdapter);
+
 
         diaryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                popupMenu = new PopupMenu(ListActivity.this, view,  Gravity.TOP);
+                popupMenu.getMenuInflater().inflate(R.menu.pop_menu, popupMenu.getMenu());
 
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.pop_delete:
+                                Diary diary = diaryListItem.get(position);
+                                diaryListItem.remove(diary);
+                                diaryAdapter.notifyDataSetChanged();
+                                MainActivity.getMySQLite().delete(diary);
+                                break;
+                            case R.id.pop_modify:
+                                Log.i(TAG, "修改還沒寫");
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
                 Log.i(TAG, diaryListItem.get(position).toString());
-                Toast.makeText(ListActivity.this, diaryListItem.get(position).toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ListActivity.this, diaryListItem.get(position).toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -51,7 +77,7 @@ public class ListActivity extends AppCompatActivity {
                 Diary diary = diaryListItem.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(ListActivity.this);
                 builder.setTitle(R.string.message);
-                builder.setMessage(R.string.delete_message + "\n" + diary.getTitle());
+                builder.setMessage(getResources().getString(R.string.delete_message) + " \n" + diary.getTitle());
                 builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -73,7 +99,6 @@ public class ListActivity extends AppCompatActivity {
                 return true;
             }
         });
-
 
 
     }
