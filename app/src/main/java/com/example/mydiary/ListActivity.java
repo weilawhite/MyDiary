@@ -32,6 +32,14 @@ public class ListActivity extends AppCompatActivity {
     private PopupMenu popupMenu;
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        diaryListItem = MainActivity.getMySQLite().selectAll();
+        diaryAdapter = new DiaryAdapter(this, diaryListItem);
+        diaryList.setAdapter(diaryAdapter);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

@@ -26,4 +26,5 @@
         <item>雨天</item>
         <item>陰天</item>
     </string-array>
+    <string name="save">確定修改此筆資料?</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.example.mydiary;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -48,6 +50,29 @@ public class ViewActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.save_btn:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                        .setTitle(R.string.message)
+                        .setMessage(getResources().getString(R.string.save) + "\n" + diary.getTitle())
+                        .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                diary.setTitle(titleEdit.getText().toString());
+                                diary.setBody(bodyEdit.getText().toString());
+                                MainActivity.getMySQLite().update(diary);
+                            }
+                        });
+                builder.create().show();
+
+                break;
+        }
 
     }
 }

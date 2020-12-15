@@ -85,6 +85,16 @@ public class MySQLite {
 
     }
 
+    public void update(Diary diary){
+        ContentValues contentValues=new ContentValues();
+        contentValues.put(Diary.KEY_TITLE,diary.getTitle());
+        contentValues.put(Diary.KEY_BODY,diary.getBody());
+        contentValues.put(Diary.KEY_WEATHER,diary.getWeather());
+        contentValues.put(Diary.KEY_DATE,diary.getDate());
+
+        database.update(tableName,contentValues,Diary.KEY_ID+"="+diary.getId(),null);
+    }
+
     public List<Diary> selectAll() {
         List<Diary> item = new ArrayList<>();
         String sqlStr = "select * from " + tableName;
