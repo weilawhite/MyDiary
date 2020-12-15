@@ -53,82 +53,72 @@ public class ListActivity extends AppCompatActivity {
         diaryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
                 Diary diary = diaryListItem.get(position);
-
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("diary", diary);
-
+                bundle.putBoolean("editable", false);
                 Intent intent = new Intent(ListActivity.this, ViewActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
-/*
-                popupMenu = new PopupMenu(ListActivity.this, view,  Gravity.TOP);
+            }
+        });
+
+        diaryList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                popupMenu = new PopupMenu(ListActivity.this, view, Gravity.TOP);
                 popupMenu.getMenuInflater().inflate(R.menu.pop_menu, popupMenu.getMenu());
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        Diary diary;
                         switch (item.getItemId()) {
                             case R.id.pop_delete:
-                                Diary diary = diaryListItem.get(position);
-                                diaryListItem.remove(diary);
-                                diaryAdapter.notifyDataSetChanged();
-                                MainActivity.getMySQLite().delete(diary);
+                                diary = diaryListItem.get(position);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ListActivity.this);
+                                builder.setTitle(R.string.message);
+                                builder.setMessage(getResources().getString(R.string.delete_message) + " \n" + diary.getTitle());
+                                builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        diaryListItem.remove(diary);
+                                        diaryAdapter.notifyDataSetChanged();
+                                        MainActivity.getMySQLite().delete(diary);
+                                    }
+                                });
+                                builder.setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                builder.create().show();
                                 break;
                             case R.id.pop_modify:
-                                Log.i(TAG, "修改還沒寫");
+
+                                diary = diaryListItem.get(position);
+
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("diary", diary);
+                                bundle.putBoolean("editable", true);
+                                Intent intent = new Intent(ListActivity.this, ViewActivity.class);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
                                 break;
                         }
                         return true;
                     }
                 });
                 popupMenu.show();
-                Log.i(TAG, diaryListItem.get(position).toString());
-                //Toast.makeText(ListActivity.this, diaryListItem.get(position).toString(), Toast.LENGTH_SHORT).show();
- */
-            }
-
-
-        });
-
-        diaryList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Diary diary = diaryListItem.get(position);
-                AlertDialog.Builder builder = new AlertDialog.Builder(ListActivity.this);
-                builder.setTitle(R.string.message);
-                builder.setMessage(getResources().getString(R.string.delete_message) + " \n" + diary.getTitle());
-                builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        diaryListItem.remove(diary);
-                        diaryAdapter.notifyDataSetChanged();
-                        MainActivity.getMySQLite().delete(diary);
-                    }
-                });
-                builder.setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-
-                    }
-                });
-
-                builder.create().show();
 
                 return true;
             }
         });
-
-
     }
 
 
     class DiaryAdapter extends BaseAdapter {
-
         Context context;
         List<Diary> diaryList;
         private LayoutInflater layoutInflater;
@@ -136,7 +126,6 @@ public class ListActivity extends AppCompatActivity {
         public DiaryAdapter(Context context, List<Diary> diaryList) {
             this.context = context;
             this.diaryList = diaryList;
-
             layoutInflater = LayoutInflater.from(context);
         }
 

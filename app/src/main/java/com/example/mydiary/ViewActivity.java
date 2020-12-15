@@ -16,12 +16,14 @@ public class ViewActivity extends AppCompatActivity implements View.OnClickListe
     ImageView weatherImg;
     ImageButton saveBtn;
     Diary diary;
+    private boolean editable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
         diary = (Diary) getIntent().getSerializableExtra("diary");
+        editable=getIntent().getBooleanExtra("editable",false);
         findView();
 
     }
@@ -43,6 +45,17 @@ public class ViewActivity extends AppCompatActivity implements View.OnClickListe
         this.setTitle(diary.getDate());
         titleEdit.setText(diary.getTitle());
         bodyEdit.setText(diary.getBody());
+
+        if(!editable){
+            titleEdit.setFocusable(false);
+            titleEdit.setClickable(false);
+            titleEdit.setLongClickable(false);
+            bodyEdit.setFocusable(false);
+            bodyEdit.setClickable(false);
+            bodyEdit.setLongClickable(false);
+            saveBtn.setVisibility(View.GONE);
+        }
+
 
         saveBtn.setOnClickListener(this);
 
