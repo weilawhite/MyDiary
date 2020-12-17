@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">我的日記本</string>
+    <string name="app_name">掌上日記本</string>
     <string name="create">重建日記本</string>
     <string name="error">資料庫開啟失敗</string>
     <string name="success">資料庫開啟成功!</string>
@@ -20,11 +20,41 @@
     <string name="delete_message">確定刪除此筆資料?</string>
     <string name="delete">刪除</string>
     <string name="modify">修改</string>
+    <string name="save_message">是否更新日記?</string>
+    <string name="save_ok">更新日記完成!</string>
+    <string name="name">Jerry Chen</string>
+    <string name="login_success">帳號登入成功!</string>
+    <string name="login_fail">帳號登入失敗!</string>
+    <string name="mysql_login_fail">連線失敗!</string>
+    <string name="mysql_login_success">連線成功!</string>
+
+
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">使用者名稱</string>
+    <string name="prompt_password">使用者密碼</string>
+    <string name="action_register">註冊帳號</string>
+    <string name="action_sign_in">登入</string>
+    <string name="action_register_in">註冊</string>
+    <string name="login_text">登入帳號</string>
+    <string name="input_error">帳號跟密碼不能為空</string>
+    <string name="register_text">註冊功能</string>
+    <string name="back">返回</string>
+    <string name="username_repeat">帳號重複，請重新輸入!</string>
+    <string name="register_success">註冊成功!</string>
+    <string name="register_fail">註冊失敗!</string>
+    <string name="mysql_reconnect">重新連接</string>
+    <string name="mysql_connect">連接伺服器中</string>
+    <string name="mysql_connect_fail">連接伺服器失敗</string>
+    <string name="authorize_fail">請先取得授權</string>
+    <string name="authorize">取得授權</string>
+    <string name="repeat_imei">該手機已經註冊過帳號</string>
+    <string name="save">儲存</string>
 
     <string-array name="weather_list">
         <item>晴天</item>
         <item>雨天</item>
         <item>陰天</item>
     </string-array>
-    <string name="save">確定修改此筆資料?</string>
+
 </resources>

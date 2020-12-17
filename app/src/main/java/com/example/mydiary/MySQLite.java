@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,9 @@ public class MySQLite {
     private String dbName = "book.db";
     private String tableName = "diary";
     private Context context;
+
+
+
 
     public MySQLite(Context context) {
         this.context = context;
@@ -76,23 +81,23 @@ public class MySQLite {
 
     public void delete(Diary diary) {
         try {
-            database.delete(tableName, String.format("ID='%d'",diary.getId()), null);
-            Log.i(TAG,"刪除成功");
-        }catch (SQLException e){
-            Log.i(TAG,"刪除失敗");
+            database.delete(tableName, String.format("ID='%d'", diary.getId()), null);
+            Log.i(TAG, "刪除成功");
+        } catch (SQLException e) {
+            Log.i(TAG, "刪除失敗");
         }
 
 
     }
 
-    public void update(Diary diary){
-        ContentValues contentValues=new ContentValues();
-        contentValues.put(Diary.KEY_TITLE,diary.getTitle());
-        contentValues.put(Diary.KEY_BODY,diary.getBody());
-        contentValues.put(Diary.KEY_WEATHER,diary.getWeather());
-        contentValues.put(Diary.KEY_DATE,diary.getDate());
+    public void update(Diary diary) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Diary.KEY_TITLE, diary.getTitle());
+        contentValues.put(Diary.KEY_BODY, diary.getBody());
+        contentValues.put(Diary.KEY_WEATHER, diary.getWeather());
+        contentValues.put(Diary.KEY_DATE, diary.getDate());
 
-        database.update(tableName,contentValues,Diary.KEY_ID+"="+diary.getId(),null);
+        database.update(tableName, contentValues, Diary.KEY_ID + "=" + diary.getId(), null);
     }
 
     public List<Diary> selectAll() {
@@ -105,19 +110,19 @@ public class MySQLite {
                 String title = cursor.getString(cursor.getColumnIndex(Diary.KEY_TITLE));
                 String body = cursor.getString(cursor.getColumnIndex(Diary.KEY_BODY));
                 String date = cursor.getString(cursor.getColumnIndex(Diary.KEY_DATE));
-                String weather=cursor.getString(cursor.getColumnIndex(Diary.KEY_WEATHER));
-                item.add(new Diary(id, title, body, date,weather));
+                String weather = cursor.getString(cursor.getColumnIndex(Diary.KEY_WEATHER));
+                item.add(new Diary(id, title, body, date, weather));
             } while (cursor.moveToNext());
         }
         cursor.close();
         return item;
     }
 
-    public int getCount(){
+    public int getCount() {
 
         String sqlStr = "select * from " + tableName;
         Cursor cursor = database.rawQuery(sqlStr, null);
-        int count=cursor.getCount();
+        int count = cursor.getCount();
         cursor.close();
         return count;
     }

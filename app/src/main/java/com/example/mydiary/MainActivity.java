@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -34,30 +37,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static MySQLite mySQLite;
     Handler handler;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         findView();
-
         Stetho.initializeWithDefaults(this);
-        mySQLite = new MySQLite(this);/*
-        handler = new Handler(Looper.myLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                setTitle(Tools.getDateTime());
-                handler.post(this);
-            }
-        });
 
-*/
+
+        mySQLite = new MySQLite(this);
+
         if (mySQLite.openDatabase()) {
             Toast.makeText(this, R.string.success, Toast.LENGTH_LONG).show();
             pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
@@ -65,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show();
     }
+
+
 
     private void findView() {
         writeBtn = findViewById(R.id.write_btn);
@@ -81,16 +74,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pageText.setText(getResources().getString(R.string.page_text) + " " + mySQLite.getCount());
         super.onRestart();
     }
+
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.write_btn:
-                Intent intent=new Intent(this,DiaryActivity.class);
+                Intent intent = new Intent(this, DiaryActivity.class);
                 startActivity(intent);
                 break;
             case R.id.view_btn:
-                Intent intent2=new Intent(this,ListActivity.class);
+                Intent intent2 = new Intent(this, ListActivity.class);
                 startActivity(intent2);
                 //mySQLite.selectAll();
                 break;

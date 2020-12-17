@@ -11,6 +11,7 @@
         android:clickable="false"
         android:focusable="false"
         android:background="@drawable/shape"
+
         android:padding="6dp">
 
         <TextView
