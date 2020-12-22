@@ -2,6 +2,7 @@ package com.example.mydiary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button loginBtn;
     private TextView registerText, titleText;
     private ProgressBar loadingBar;
+
+    private boolean registerMode;
 
     //
     static {
@@ -59,6 +62,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         loginBtn.setOnClickListener(this);
         registerText.setPaintFlags(registerText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        registerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (registerMode) {
+                    titleText.setText(R.string.login_text);
+                    registerText.setText(R.string.action_register);
+                    loginBtn.setText(R.string.action_sign_in);
+                } else {
+                    titleText.setText(R.string.register_text);
+                    registerText.setText(R.string.back);
+                    loginBtn.setText(R.string.action_register_in);
+                }
+                registerMode = !registerMode;
+            }
+        });
     }
 
     public void loginMySQL(String username, String password) {
@@ -79,11 +97,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             usernameEdit.setEnabled(true);
                             passwordEdit.setEnabled(true);
                             loginBtn.setEnabled(true);
+                            titleText.setText(R.string.login_text);
+                            registerText.setEnabled(true);
+
                         }
                     }
                 });
             }
         }).start();
+    }
+
+    public boolean select(String username) {
+        String sqlstr = String.format("select username,password from %s where username='%s' ", TABLE_NAME, username);
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlstr);
+            if (resultSet != null && resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
 
     public boolean select(String username, String password) {
@@ -108,13 +143,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                loadingBar.setVisibility(View.INVISIBLE);
                 if (success) {
                     Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
-
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            Bundle bundle = new Bundle();
+                            bundle.putString("username", username);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            if (conn != null) {
+                                try {
+                                    conn.close();
+                                } catch (SQLException throwables) {
+                                    throwables.printStackTrace();
+                                }
+                            }
+                            LoginActivity.this.finish();
+                        }
+                    }.start();
                 } else {
                     Toast.makeText(LoginActivity.this, "登入失敗", Toast.LENGTH_SHORT).show();
                 }
-                loadingBar.setVisibility(View.INVISIBLE);
+
             }
         });
 
@@ -122,13 +180,83 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        new Thread(){
+
+        if (conn == null) {
+            return;
+        }
+        final String username = usernameEdit.getText().toString();
+        final String password = passwordEdit.getText().toString();
+
+        if (username.equals("") || password.equals("")) {
+            Toast.makeText(LoginActivity.this, R.string.input_error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        loadingBar.setVisibility(View.VISIBLE);
+
+        new Thread() {
             @Override
             public void run() {
-                login(usernameEdit.getText().toString(), passwordEdit.getText().toString());
+
+                if (registerMode) {
+                    register(username, password);
+                } else {
+                    login(username, password);
+                }
             }
         }.start();
 
         loadingBar.setVisibility(View.VISIBLE);
     }
+
+    public void register(String username, String password) {
+        boolean repeat = select(username);
+        if (repeat) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadingBar.setVisibility(View.INVISIBLE);
+                    registerText.setEnabled(true);
+                    Toast.makeText(LoginActivity.this, R.string.username_repeat, Toast.LENGTH_SHORT).show();
+                }
+            });
+            return;
+        }
+
+        if (username.equals("") || password.equals("")) return;
+
+        String sqlstr = String.format("insert into %s (username,password) values ('%s','%s');", TABLE_NAME, username, password);
+
+        try {
+            Statement statement = conn.createStatement();
+            statement.executeUpdate(sqlstr);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    registerText.setEnabled(true);
+                    loadingBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(LoginActivity.this, R.string.register_success, Toast.LENGTH_SHORT).show();
+
+                    titleText.setText(R.string.login_text);
+                    registerText.setText(R.string.action_register);
+                    loginBtn.setText(R.string.action_sign_in);
+                    registerMode = false;
+                }
+            });
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    registerText.setEnabled(true);
+                    loadingBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(LoginActivity.this, R.string.register_fail, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+
+    }
+
 }

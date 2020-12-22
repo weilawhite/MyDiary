@@ -25,7 +25,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button writeBtn, viewBtn, createBtn;
-    TextView pageText;
+    TextView pageText,username;
     private static SQLiteDatabase database;
     private String dbName = "diary_book.db";
     private String tableName = "diary";
@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Stetho.initializeWithDefaults(this);
 
 
+
+
         mySQLite = new MySQLite(this);
 
         if (mySQLite.openDatabase()) {
@@ -64,9 +66,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewBtn = findViewById(R.id.view_btn);
         createBtn = findViewById(R.id.create_btn);
         pageText = findViewById(R.id.page_text);
+        username=findViewById(R.id.username_text);
         writeBtn.setOnClickListener(this);
         viewBtn.setOnClickListener(this);
         createBtn.setOnClickListener(this);
+
+        Bundle bundle=getIntent().getExtras();
+        username.setText(bundle.getString("username"));
     }
 
     @Override

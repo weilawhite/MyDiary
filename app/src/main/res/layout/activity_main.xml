@@ -17,6 +17,16 @@
         android:text="@string/welcome"
         android:textSize="32sp" />
 
+    <TextView
+        android:id="@+id/username_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="0"
+        android:textSize="30sp" />
 
     <LinearLayout
         android:id="@+id/button_layout"
@@ -80,6 +90,8 @@
         android:layout_centerHorizontal="true">
 
     </TextView>
+
+
 
 
 </RelativeLayout>

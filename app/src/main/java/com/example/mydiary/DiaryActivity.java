@@ -51,7 +51,6 @@ public class DiaryActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.cancel_btn:
-
                 bodyEdit.setText("");
 
                 break;
